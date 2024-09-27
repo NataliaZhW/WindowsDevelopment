@@ -1,4 +1,4 @@
-#include<Windows.h>
+Ôªø#include<Windows.h>
 #include"resource.h"
 
 
@@ -29,7 +29,7 @@ BOOL CALLBACK DlgProg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			SendMessage(hEditPassword, WM_SETTEXT, 0, (LPARAM)sz_buffer);
 		}
 		break;
-		case IDOK: MessageBox(hwnd, "¡€À¿ Õ¿∆¿“¿  ÕŒœ ¿ Œ ", "Info", MB_OK | MB_ICONINFORMATION);
+		case IDOK: MessageBox(hwnd, "–ë–´–õ–ê –ù–ê–ñ–ê–¢–ê –ö–ù–û–ü–ö–ê –û–ö", "Info", MB_OK | MB_ICONINFORMATION);
 			break;
 		case IDCANCEL:
 			EndDialog(hwnd, 0);
