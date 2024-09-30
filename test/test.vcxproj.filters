@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -30,8 +30,8 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="resource.hm">
-      <Filter>Header Files</Filter>
-    </None>
+    <Image Include="icq_93913.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
