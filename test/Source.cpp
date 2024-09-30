@@ -41,9 +41,9 @@ BOOL CALLBACK DlgProg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_INITDIALOG:	//Отрабатывает только один раз, при создании окна
 		//H - Handler (обработчик, дескриптор)
 	{
-		HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1));
+		//HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1));
 		//		SendMessage(окно, сообщение, параметры сообщения)
-		SendMessage(hwnd, WM_SETICON, 0, (LRESULT)hIcon); // LONG_PTR //   //??? typedef __int64 
+		//SendMessage(hwnd, WM_SETICON, 0, (LRESULT)hIcon); // LONG_PTR //   //??? typedef __int64 
 		//SetFocus(hEditLogin); //функция SetFocus устанавливает фокус клавиатуры в указанное окно
 		//SetFocus(GetDlgItem(hwnd, IDC_EDIT_LOGIN));
 		HWND hEditLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
