@@ -35,11 +35,7 @@ BOOL CALLBACK DlgProg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
-			/*case IDC_BUTTON_ADD:
-			{
-				DialogBoxParam(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG_ADD), hwnd, DlgProcAdd, 0);
-			}
-			break;*/
+			
 		case IDOK:
 		{
 			CONST INT SIZE = 256;
@@ -55,7 +51,7 @@ BOOL CALLBACK DlgProg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case IDCANCEL: EndDialog(hwnd, 0); break;
 		}
 		break;
-	case WM_CLOSE: EndDialog(hwnd, 0); break;//Отрабатывает при нажатии на кнопку X (Закрыть)
+	case WM_CLOSE: EndDialog(hwnd, 0); break;
 	}
 	return FALSE;
 }
