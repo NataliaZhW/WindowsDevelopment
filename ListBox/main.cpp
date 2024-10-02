@@ -1,4 +1,4 @@
-//ComboBox
+//ListBox
 #include<Windows.h>
 #include <stdio.h>
 #include <wchar.h>
@@ -23,7 +23,7 @@ BOOL CALLBACK DlgProg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1));
 		SendMessage(hwnd, WM_SETICON, 0, (LPARAM)hIcon);
 
-		HWND hCombo = GetDlgItem(hwnd, IDC_COMBO2);
+		HWND hCombo = GetDlgItem(hwnd, IDC_COMBO1);
 		for (int i = 0; i < sizeof(g_COMBO_BOX_ITEM) / sizeof(g_COMBO_BOX_ITEM[0]); i++)
 		{
 			SendMessage(hCombo, CB_ADDSTRING, 0, (LPARAM)g_COMBO_BOX_ITEM[i]);
@@ -44,7 +44,7 @@ BOOL CALLBACK DlgProg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{
 			CONST INT SIZE = 256;
 			CHAR sz_buffer[SIZE] = {};
-			HWND hCombo = GetDlgItem(hwnd, IDC_COMBO2);
+			HWND hCombo = GetDlgItem(hwnd, IDC_COMBO1);
 			int i = SendMessage(hCombo, CB_GETCURSEL, 0, 0);
 			SendMessage(hCombo, CB_GETLBTEXT, i, (LPARAM)sz_buffer);
 			CHAR sz_message[SIZE]{};
