@@ -51,55 +51,39 @@ BOOL CALLBACK DlgProg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			CHAR sz_buffer[SIZE] = {};
 			//2) Получаем обработчики текстовых полей:
 			HWND hEditAdd = GetDlgItem(hwnd, IDC_EDIT_ADD);//Функция GetDlgItem() по ID-ресурса дочернего окна возвращает HWND соответствующего дочернего окна.
-
 			HWND hList = GetDlgItem(hwnd, IDC_LIST1);
-			//3) Читаем текст из текстового поля 'Login':
-			
-			SendMessage(hEditAdd, WM_GETTEXT, SIZE, (LPARAM)sz_buffer);
-			//SendMessage(hEditLogin, WM_GETTEXT, SIZE, (LPARAM)sz_buffer);
-			//4) Загружаем содржимое текстового буфера в поле 'Password':
-			SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)sz_buffer);
-			/*CONST INT SIZE = 256;
-			CHAR sz_buffer[SIZE] = {};
-			HWND hCombo = GetDlgItem(hwnd, IDC_LIST1);
-			int i = SendMessage(hCombo, LB_GETCURSEL, 0, 0);
-			SendMessage(hCombo, LB_GETTEXT, i, (LPARAM)sz_buffer);
-			CHAR sz_message[SIZE]{};
-			SendMessage(hCombo, LB_ADDSTRING, 0, (LPARAM)g_LIST_BOX_ITEM[i]);
-			sprintf_s(sz_message, "Вы выбрали элемент № %i, со значением \"%s\"", i, (LPARAM)sz_buffer);
-			MessageBox(hwnd, sz_message, "Info", MB_OK | MB_ICONINFORMATION);*/
+			//3) Читаем текст :
+			SendMessage(hEditAdd, WM_GETTEXT, SIZE, (LPARAM)sz_buffer);			
+			//4) Загружаем содржимое текстового буфера в поле :
+			SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)sz_buffer);			
 		}
 		break; 
 		case IDC_EDIT_ADD:
 		{
 			CONST INT SIZE = 256; //Длина соообщения
 			CHAR sz_buffer[SIZE]{}; //массив бефера
-			HWND hEditLogin = GetDlgItem(hwnd, IDC_EDIT_ADD);// Получаем дискриптор окна логина
-			SendMessage(hEditLogin, WM_GETTEXT, SIZE, (LPARAM)sz_buffer); //считываем в буфер данные из окна логина
+			HWND hEditAdd = GetDlgItem(hwnd, IDC_EDIT_ADD);// Получаем дискриптор окна логина
+			SendMessage(hEditAdd, WM_GETTEXT, SIZE, (LPARAM)sz_buffer); //считываем в буфер данные из окна логина
 			if (HIWORD(wParam) == EN_SETFOCUS && strcmp(sz_buffer, g_sz_INVITATION) == 0)
 				// strcmp - сравниваем строку1 и строку2 
 				// int strcmp (const char * str1, const char * str2)
 				// EN_SETFOCUS когда окошко получает фокус клавиатуры    
 				// HIWORD() - Извлекает слово старшего порядка из указанного 32-разрядного значения
 				// Если окно получает фокус (HIWORD(wParam) поменялся на EN_SETFOCUS) && "значение" sz_buffer было "предопределенным", то устанавливаем пустую строку "" 
-				SendMessage(hEditLogin, WM_SETTEXT, 0, (LPARAM)"");
+				SendMessage(hEditAdd, WM_SETTEXT, 0, (LPARAM)"");
 			if (HIWORD(wParam) == EN_KILLFOCUS && strcmp(sz_buffer, "") == 0)
 				// Если окно теряет фокус (HIWORD(wParam) поменялся на EN_KILLFOCUS) && "значение" sz_buffer было пустым "", то устанавливаем строку "предопределенное" 
-				SendMessage(hEditLogin, WM_SETTEXT, 0, (LPARAM)g_sz_INVITATION);
+				SendMessage(hEditAdd, WM_SETTEXT, 0, (LPARAM)g_sz_INVITATION);
 		}		
 		break;
 		
 		case IDC_BUTTON_DEL:
 		{
-			/*CONST INT SIZE = 256;
+			CONST INT SIZE = 256;
 			CHAR sz_buffer[SIZE] = {};
-			HWND hCombo = GetDlgItem(hwnd, IDC_LIST1);
-			int i = SendMessage(hCombo, LB_GETCURSEL, 0, 0);
-			SendMessage(hCombo, LB_, i, (LPARAM)sz_buffer);
-			CHAR sz_message[SIZE]{};			
-			SendMessage(hCombo, LB_ADDSTRING, 0, (LPARAM)g_LIST_BOX_ITEM[i]); 
-			sprintf_s(sz_message, "Вы выбрали элемент № %i, со значением \"%s\"", i, (LPARAM)sz_buffer);
-			MessageBox(hwnd, sz_message, "Info", MB_OK | MB_ICONINFORMATION);*/
+			HWND hList = GetDlgItem(hwnd, IDC_LIST1);
+			int i = SendMessage(hList, LB_GETCURSEL, 0, 0);
+			SendMessage(hList, LB_DELETESTRING, i, 0);	
 		}
 		break;
 		case IDOK:
