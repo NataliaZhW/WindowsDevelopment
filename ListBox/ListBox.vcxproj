@@ -131,9 +131,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
+    <ResourceCompile Include="Resource1.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\test\icq_93913.ico" />
