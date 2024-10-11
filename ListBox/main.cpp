@@ -44,6 +44,23 @@ BOOL CALLBACK DlgProg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
+		case IDC_LIST1:
+		{
+			if (HIWORD(wParam) == LBN_DBLCLK);
+			// EN_SETFOCUS && strcmp(sz_buffer, g_sz_INVITATION) == 0)
+			//	// strcmp - сравниваем строку1 и строку2 
+			//	// int strcmp (const char * str1, const char * str2)
+			//	// EN_SETFOCUS когда окошко получает фокус клавиатуры    
+			//	// HIWORD() - Извлекает слово старшего порядка из указанного 32-разрядного значения
+			//	// Если окно получает фокус (HIWORD(wParam) поменялся на EN_SETFOCUS) && "значение" sz_buffer было "предопределенным", то устанавливаем пустую строку "" 
+			//	SendMessage(hEditAdd, WM_SETTEXT, 0, (LPARAM)"");
+			//CONST INT SIZE = 256;
+			//CHAR sz_buffer[SIZE] = {};
+			//HWND hList = GetDlgItem(hwnd, IDC_LIST1);
+			//int i = SendMessage(hList, LB_GETCURSEL, 0, 0);
+			//SendMessage(hList, LB_DELETESTRING, i, 0);
+		}
+		break;
 		case IDC_BUTTON_ADD:
 		{
 			//1) Создаем буфер чтения:
@@ -59,7 +76,7 @@ BOOL CALLBACK DlgProg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 
 			/*int x = SendMessage(hList, LB_FINDSTRING, -1, (LPARAM)sz_buffer);
-			CHAR sz_message[SIZE]{}; 
+			CHAR sz_message[SIZE]{};
 			sprintf_s(sz_message, "элемент № %i,", x+1 );
 			MessageBox(hwnd, sz_message, "Info", MB_OK | MB_ICONINFORMATION);*/
 
@@ -68,10 +85,10 @@ BOOL CALLBACK DlgProg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				MessageBox(hwnd, "Уже есть", "Info", MB_OK | MB_ICONINFORMATION);
 			}
 			else
-			{				
-			if (strcmp(sz_buffer, g_sz_INVITATION) == 0)
+			{
+				if (strcmp(sz_buffer, g_sz_INVITATION) == 0)
 				{
-					MessageBox(hwnd, "Пустое значение", "Info", MB_OK | MB_ICONINFORMATION); 
+					MessageBox(hwnd, "Пустое значение", "Info", MB_OK | MB_ICONINFORMATION);
 					break;
 				}
 				SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)sz_buffer);
@@ -118,9 +135,9 @@ BOOL CALLBACK DlgProg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			{
 				sprintf_s(sz_message, "Вы выбрали элемент № %i, со значением \"%s\"", i, (LPARAM)sz_buffer);
 			}
-			else 
-			{ 
-				sprintf_s(sz_message, "Вы не выбрали элемент"); 
+			else
+			{
+				sprintf_s(sz_message, "Вы не выбрали элемент");
 			}
 			MessageBox(hwnd, sz_message, "Info", MB_OK | MB_ICONINFORMATION);
 		}
