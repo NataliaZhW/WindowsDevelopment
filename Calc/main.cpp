@@ -44,17 +44,19 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	wClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);	//Small Icon
 	//wClass.hIcon = (HICON)LoadImage(hInstance, "ICO\\pizza_icon_black.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
 	//wClass.hIconSm = (HICON)LoadImage(hInstance, "ICO\\pizza_icon_big.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);	//Small Icon
-
-	wClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-	/*wClass.hCursor = (HICON)LoadImage
-	(
-		hInstance,
-		"CURSOR\\Star Wars Obi-Wan Kenobi Lightsaber Animated--cursor--SweezyCursors.ani",
-		IMAGE_ICON,
-		LR_DEFAULTSIZE,
-		LR_DEFAULTSIZE,
-		LR_LOADFROMFILE
-	);*/
+	wClass.hIcon = (HICON)LoadImage(hInstance, "ICO\\calculator.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
+	wClass.hIconSm = (HICON)LoadImage(hInstance, "ICO\\calculator.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);	//Small Icon
+	
+	//wClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+	///*wClass.hCursor = (HICON)LoadImage
+	//(
+	//	hInstance,
+	//	"CURSOR\\Star Wars Obi-Wan Kenobi Lightsaber Animated--cursor--SweezyCursors.ani",
+	//	IMAGE_ICON,
+	//	LR_DEFAULTSIZE,
+	//	LR_DEFAULTSIZE,
+	//	LR_LOADFROMFILE
+	//);*/
 	wClass.hbrBackground = (HBRUSH)COLOR_WINDOW;
 
 	//
@@ -109,6 +111,11 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 
 BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	static double a, b;
+	static char operation;
+	static bool input;
+	static bool operation_input;
+
 	switch (uMsg)
 	{
 	case WM_CREATE:
@@ -255,17 +262,37 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		HWND hEditDisplay = GetDlgItem(hwnd, IDC_EDIT_DISPLAY);// Получаем дискриптор окна 
 		if (LOWORD(wParam) >= IDC_BUTTON_0 && LOWORD(wParam) <= IDC_BUTTON_9)
 		{
+			if (operation_input == FALSE  )
+			{
+				SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)""); operation_input = TRUE;
+			}
 			sz_digit[0] = LOWORD(wParam) - IDC_BUTTON_0 + 48;
 			SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)sz_display);//считываем в буфер
 			if (sz_display[0] == '0' && sz_display[1] != '.')sz_display[0] = 0;
 			strcat(sz_display, sz_digit);
 			SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
+			input = TRUE;
 		}
 		if (LOWORD(wParam) == IDC_BUTTON_POINT)
 		{
 			SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)sz_display);//считываем в буфер данные из окна 
-			if (strchr(sz_display, '.')) break;// ==NULL
 
+			const int SIZE = 256;
+			char buffer[SIZE]{};
+
+			SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)buffer);
+			char number_temp[SIZE];			
+			const char delimiters[] = "*/-+";
+			for (char* pch = strtok(buffer, delimiters); pch; pch = strtok(NULL, delimiters))
+				//Функция strtok() разделяет строку на токены:
+				sprintf_s(number_temp, pch);
+
+			if (strchr(number_temp, '.')) break;// ==NULL
+			if (sz_display[strlen(sz_display) - 1] == '.'
+				|| sz_display[strlen(sz_display) - 1] == '+'
+				|| sz_display[strlen(sz_display) - 1] == '-'
+				|| sz_display[strlen(sz_display) - 1] == '*'
+				|| sz_display[strlen(sz_display) - 1] == '/') sz_display[strlen(sz_display) - 1] = 0;
 			strcat(sz_display, ".");
 			SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
 		}
@@ -336,7 +363,21 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		if (LOWORD(wParam) == IDC_BUTTON_EQUAL)
 		{
-			float result = 0;
+			//SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
+			//if (operation_input)b = strtod(sz_display, NULL);
+			//switch (operation)
+			//{
+			//case  IDC_BUTTON_ASTER: a *= b; break;
+			//case  IDC_BUTTON_SLASH: a /= b; break;
+			//case  IDC_BUTTON_MINUS: a -= b; break;
+			//case  IDC_BUTTON_PLUS: a += b; break;
+			//}
+			//			
+		
+			//operation_input = FALSE;
+			//sprintf_s(sz_display, "%g", a);
+			//SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
+
 			const int SIZE = 256;
 			char buffer[SIZE]{};
 
@@ -349,14 +390,36 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				number[n++] = atof(pch);
 			//pch - Pointer to Character (Указатель на символ)
 
+			/*for (int i = 0; i < n; i++)
+			{
+				char temp_sz_display[SIZE]{};
+
+				sprintf_s(temp_sz_display, "%g",  number[i]);
+				strcat(sz_display, temp_sz_display);
+				SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
+			}*/
+			
 			SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)buffer);
+			//SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)buffer);
 			char znak[10];
 			int n1 = 0;
 			const char delimiters1[] = "0123456789.";
-			for (char* pch = strtok(buffer, delimiters1); pch; pch = strtok(NULL, delimiters))
+			//for (char* pch = strtok(buffer, delimiters1); pch; pch = strtok(NULL, delimiters))
+			
+			char temp_znak_sz_display[SIZE]{};
+			char temp_znak_display[SIZE]{};
+				for (int i = 0; i <SIZE ; i++)//sizeof(buffer)/ sizeof(char)
+				{
+					if (buffer[i] == '*' || buffer[i] == '/' || buffer[i] == '-' || buffer[i] == '+')// 
+					{
+					znak[n1++] = buffer[i];
+					sprintf_s(temp_znak_sz_display, "%c", buffer[i]);
+					strcat(temp_znak_display, temp_znak_sz_display);					
+					}
+				}
+				//SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)temp_znak_display);
+		
 
-				znak[n1++] = pch[0];
-			//for (int i = 0; i < n; i++)cout << number[i] << "\t"; cout << endl;
 
 			for (int i = 0; i < n1; i++)
 				switch (znak[i])
@@ -378,13 +441,46 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 						break;
 				}
 
+			/*for (int i = 0; i < n1; i++)
+			{
+				char temp_sz_display[SIZE]{};
+
+				sprintf_s(temp_sz_display, "%c", znak[i]);
+				strcat(sz_display, temp_sz_display);
+				SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
+			}*/
+
+			/*for (int i = 0; i < n; i++)
+			{
+				char temp_sz_display[SIZE]{};
+
+				sprintf_s(temp_sz_display, "%g", number[i]);
+				strcat(sz_display, temp_sz_display);
+				SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
+			}*/
+
+
+			float result = number[0];
+			CHAR message[SIZE]{};
 			for (int i = 0; i < n1; i++)
 				switch (znak[i])
 				{
-				case '+': { result += number[i]; }break;
-				case '-': { result -= number[i]; }break;
+				case '+': {
+					result += number[i+1]; 
+					//char temp_sz_display[SIZE]{};
+					//sprintf_s(temp_sz_display, ";%g;", result);
+					//strcat(message, temp_sz_display);
+					//SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)message);
+				}break;
+				case '-': { result -=  number[i+1]; }break;
 				}
-			SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)result);
+			//result = 0;
+			//result = number[0]+ number[1];
+			
+			sprintf_s(message, "%g", result);
+
+			SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)message);
+			operation_input = FALSE;
 		}
 
 		//switch (LOWORD(wParam))
