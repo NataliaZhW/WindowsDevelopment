@@ -156,7 +156,6 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				);
 			}
 		}
-
 		CreateWindowEx
 		(
 			NULL,
@@ -187,9 +186,7 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		char sz_operation[2] = "";
 		for (int i = 0; i < 4; i++)
 		{
-
 			sz_operation[0] = g_OPERATIONS[i];//
-
 			CreateWindowEx
 			(
 				NULL,
@@ -199,7 +196,7 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				g_OPERETION_START_X, g_OPERETION_START_Y + (g_BUTTON_SIZE + g_INTERVAL) * i,
 				g_BUTTON_SIZE, g_BUTTON_SIZE,
 				hwnd,
-				(HMENU)(IDC_BUTTON_PLUS + i),
+				(HMENU)(IDC_BUTTON_ASTER + i),
 				GetModuleHandle(NULL),
 				NULL
 			);
@@ -278,7 +275,7 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 			if (strlen(sz_display) == 1)sz_display[0] = '0';// ==NULL  break
 
-			else sz_display[strlen(sz_display)-1]=0;
+			else sz_display[strlen(sz_display) - 1] = 0;
 			SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
 		}
 		if (LOWORD(wParam) == IDC_BUTTON_CLEAR)
@@ -286,6 +283,110 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			sz_display[0] = '0';// 			
 			SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
 		}
+
+		if (LOWORD(wParam) == IDC_BUTTON_PLUS)
+		{
+			SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)sz_display);
+
+			if (sz_display[strlen(sz_display) - 1] == '.'
+				|| sz_display[strlen(sz_display) - 1] == '+'
+				|| sz_display[strlen(sz_display) - 1] == '-'
+				|| sz_display[strlen(sz_display) - 1] == '*'
+				|| sz_display[strlen(sz_display) - 1] == '/') sz_display[strlen(sz_display) - 1] = 0;
+			strcat(sz_display, "+");
+			SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
+		}
+
+		if (LOWORD(wParam) == IDC_BUTTON_MINUS)
+		{
+			SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)sz_display);
+			if (sz_display[strlen(sz_display) - 1] == '.'
+				|| sz_display[strlen(sz_display) - 1] == '+'
+				|| sz_display[strlen(sz_display) - 1] == '-'
+				|| sz_display[strlen(sz_display) - 1] == '*'
+				|| sz_display[strlen(sz_display) - 1] == '/') sz_display[strlen(sz_display) - 1] = 0;
+			strcat(sz_display, "-");
+			SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
+		}
+
+		if (LOWORD(wParam) == IDC_BUTTON_ASTER)
+		{
+			SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)sz_display);
+
+			if (sz_display[strlen(sz_display) - 1] == '.'
+				|| sz_display[strlen(sz_display) - 1] == '+'
+				|| sz_display[strlen(sz_display) - 1] == '-'
+				|| sz_display[strlen(sz_display) - 1] == '*'
+				|| sz_display[strlen(sz_display) - 1] == '/') sz_display[strlen(sz_display) - 1] = 0;
+			strcat(sz_display, "*");
+			SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
+		}
+
+		if (LOWORD(wParam) == IDC_BUTTON_SLASH)
+		{
+			SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)sz_display);
+			if (sz_display[strlen(sz_display) - 1] == '.'
+				|| sz_display[strlen(sz_display) - 1] == '+'
+				|| sz_display[strlen(sz_display) - 1] == '-'
+				|| sz_display[strlen(sz_display) - 1] == '*'
+				|| sz_display[strlen(sz_display) - 1] == '/') sz_display[strlen(sz_display) - 1] = 0;
+			strcat(sz_display, "/");
+			SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
+		}
+
+		if (LOWORD(wParam) == IDC_BUTTON_EQUAL)
+		{
+			float result = 0;
+			const int SIZE = 256;
+			char buffer[SIZE]{};
+
+			SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)buffer);
+			float number[10];
+			int n = 0;
+			const char delimiters[] = "*/-+";
+			for (char* pch = strtok(buffer, delimiters); pch; pch = strtok(NULL, delimiters))
+				//Функция strtok() разделяет строку на токены:
+				number[n++] = atof(pch);
+			//pch - Pointer to Character (Указатель на символ)
+
+			SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)buffer);
+			char znak[10];
+			int n1 = 0;
+			const char delimiters1[] = "0123456789.";
+			for (char* pch = strtok(buffer, delimiters1); pch; pch = strtok(NULL, delimiters))
+
+				znak[n1++] = pch[0];
+			//for (int i = 0; i < n; i++)cout << number[i] << "\t"; cout << endl;
+
+			for (int i = 0; i < n1; i++)
+				switch (znak[i])
+				{
+				case '*': {
+					number[i + 1] = number[i] * (number[i + 1]);
+					number[i] = 0;
+					if (i == 0) znak[i] = '+';
+					else znak[i] = znak[i - 1];
+				}
+						break;
+
+				case '/': {
+					number[i + 1] = number[i] / (number[i + 1]);
+					number[i] = 0;
+					if (i == 0) znak[i] = '+';
+					else znak[i] = znak[i - 1];
+				}
+						break;
+				}
+
+			for (int i = 0; i < n1; i++)
+				switch (znak[i])
+				{
+				case '+': { result += number[i]; }break;
+				case '-': { result -= number[i]; }break;
+				}
+			SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)result);
+		}
+
 		//switch (LOWORD(wParam))
 		//{
 		//case IDC_BUTTON:
@@ -309,6 +410,8 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 	return 0;
 }
+
+
 
 
 
