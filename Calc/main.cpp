@@ -41,22 +41,11 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 
 	//Appearance:
 	wClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-	wClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);	//Small Icon
-	//wClass.hIcon = (HICON)LoadImage(hInstance, "ICO\\pizza_icon_black.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
-	//wClass.hIconSm = (HICON)LoadImage(hInstance, "ICO\\pizza_icon_big.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);	//Small Icon
+	wClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);	//Small Icon	
 	wClass.hIcon = (HICON)LoadImage(hInstance, "ICO\\calculator.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
 	wClass.hIconSm = (HICON)LoadImage(hInstance, "ICO\\calculator.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);	//Small Icon
 
-	//wClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-	///*wClass.hCursor = (HICON)LoadImage
-	//(
-	//	hInstance,
-	//	"CURSOR\\Star Wars Obi-Wan Kenobi Lightsaber Animated--cursor--SweezyCursors.ani",
-	//	IMAGE_ICON,
-	//	LR_DEFAULTSIZE,
-	//	LR_DEFAULTSIZE,
-	//	LR_LOADFROMFILE
-	//);*/
+	
 	wClass.hbrBackground = (HBRUSH)COLOR_WINDOW;
 
 	//
@@ -111,10 +100,10 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 
 BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	static double a, b;
-	static char operation;
-	static bool input;
-	static bool operation_input = FALSE;
+	//static double a, b;
+	//static char operation;
+	//static bool input;
+	static bool operation_input = FALSE;//выражение не начинали вводить
 
 	switch (uMsg)
 	{
@@ -148,19 +137,11 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		);
 
 		char number[2] = "";
-		//int number_temp = 0;
-		//char number[2] = "";
 		for (int i = 6; i >= 0; i -= 3)
 		{
 			for (int j = 0; j < 3; j++)
 			{
-
 				number[0] = i + j + '1';//49
-				//number_temp++;
-				//number[0] = number_temp + 48 ;//
-				// 
-				//CHAR number[2];
-				//sprintf_s(number, "%i", IDC_BUTTON_0 + j + i - 999);
 				CreateWindowEx
 				(
 					NULL,
@@ -184,7 +165,7 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			WS_CHILD | WS_VISIBLE,
 			g_BUTTON_START_X, g_BUTTON_START_Y + (g_BUTTON_SIZE + g_INTERVAL) * 3 + g_DISPLAY_HEIGHT + g_INTERVAL,
 			g_BUTTON_DOUBLE_SIZE, g_BUTTON_SIZE,
-			hwnd,//(HWND)
+			hwnd,
 			(HMENU)IDC_BUTTON_0,
 			GetModuleHandle(NULL),
 			NULL
@@ -198,7 +179,7 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			g_BUTTON_START_X + g_BUTTON_DOUBLE_SIZE + g_INTERVAL,
 			g_BUTTON_START_Y + (g_BUTTON_SIZE + g_INTERVAL) * 3 + g_DISPLAY_HEIGHT + g_INTERVAL,
 			g_BUTTON_SIZE, g_BUTTON_SIZE,
-			hwnd,//(HWND)
+			hwnd,
 			(HMENU)IDC_BUTTON_POINT,
 			GetModuleHandle(NULL),
 			NULL
@@ -227,12 +208,10 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			"Button",
 			"<=",
 			WS_CHILD | WS_VISIBLE,
-			//g_BUTTON_START_X + g_BUTTON_DOUBLE_SIZE + g_INTERVAL,
-			//g_BUTTON_START_Y + (g_BUTTON_SIZE + g_INTERVAL) * 3, 
 			g_CONTROL_BUTTONS_START_X,
 			g_CONTROL_BUTTONS_START_Y + g_DISPLAY_HEIGHT + g_INTERVAL,
 			g_BUTTON_SIZE, g_BUTTON_SIZE,
-			hwnd,//(HWND)
+			hwnd,
 			(HMENU)IDC_BUTTON_BSP,
 			GetModuleHandle(NULL),
 			NULL
@@ -246,7 +225,7 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			g_CONTROL_BUTTONS_START_X,
 			g_CONTROL_BUTTONS_START_Y + g_BUTTON_SIZE + g_INTERVAL + g_DISPLAY_HEIGHT + g_INTERVAL,
 			g_BUTTON_SIZE, g_BUTTON_SIZE,
-			hwnd,//(HWND)
+			hwnd,
 			(HMENU)IDC_BUTTON_CLEAR,
 			GetModuleHandle(NULL),
 			NULL
@@ -260,7 +239,7 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			g_CONTROL_BUTTONS_START_X,
 			g_CONTROL_BUTTONS_START_Y + (g_BUTTON_SIZE + g_INTERVAL) * 2 + g_DISPLAY_HEIGHT + g_INTERVAL,
 			g_BUTTON_SIZE, g_BUTTON_DOUBLE_SIZE,
-			hwnd,//(HWND)
+			hwnd,
 			(HMENU)IDC_BUTTON_EQUAL,
 			GetModuleHandle(NULL),
 			NULL
@@ -271,43 +250,61 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		CONST INT SIZE = 256; //Длина соообщения
 		CHAR sz_display[SIZE]{}; //массив буфера
-		CHAR sz_digit[2]{}; //массив буфера
+		CHAR sz_digit[2]{}; //массив буфера //сюда попадает цифра
 		HWND hEditDisplay = GetDlgItem(hwnd, IDC_EDIT_DISPLAY);// Получаем дискриптор окна 
 		HWND hEditDisplayMemory = GetDlgItem(hwnd, IDC_EDIT_DISPLAY_MEMORY);// Получаем дискриптор окна 
+		
+		
+		//цифры
 		if (LOWORD(wParam) >= IDC_BUTTON_0 && LOWORD(wParam) <= IDC_BUTTON_9)
 		{
-			if (operation_input == FALSE)
+			if (operation_input == FALSE)//если FALSE - начало новых подсчетов
 			{
-				SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)"0"); operation_input = TRUE;
+				SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)"0"); 
+				operation_input = TRUE; //пока TRUE выражение добавляется
 			}
-			sz_digit[0] = LOWORD(wParam) - IDC_BUTTON_0 + 48;
+			sz_digit[0] = LOWORD(wParam) - IDC_BUTTON_0 + 48;//сюда попадает цифра
 			SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)sz_display);//считываем в буфер
-			if (sz_display[0] == '0' && sz_display[1] != '.' && sz_display[1] != '+' && sz_display[1] != '-' && sz_display[1] != '/' && sz_display[1] != '*')sz_display[0] = 0;
+			
+			// если на табло первый знак '0', а второй не '.' '/' '*' '-' '+' или на табло только "+", то значит это только начало выражения, затираем "0" или "+" и записываем нажатую цифру 		 
+			if (sz_display[0] == '0' && sz_display[1] != '.' && sz_display[1] != '+' && 
+				sz_display[1] != '-' && sz_display[1] != '/' && sz_display[1] != '*'
+				|| sz_display[0] == '+' && sz_display[1] == 0) sz_display[0] = 0;
+			
+			// если последнее число состоит из одного 0, то дополнительные 00 не печатать
+			else if (strlen(sz_display)>2 && sz_display[strlen(sz_display) - 1] == '0'
+				&& (sz_display[strlen(sz_display) - 2] == '+'
+				|| sz_display[strlen(sz_display) - 2] == '-'
+				|| sz_display[strlen(sz_display) - 2] == '*'
+				|| sz_display[strlen(sz_display) - 2] == '/')) break;
+			
 			strcat(sz_display, sz_digit);
 			SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
-			input = TRUE;
+			operation_input = TRUE; //выражение началось
 		}
 
-
+		//точка
 		if (LOWORD(wParam) == IDC_BUTTON_POINT)
 		{
 			SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)sz_display);//считываем в буфер данные из окна 
 
-			if (operation_input == FALSE) //+предыдущий знак
+			if (operation_input == FALSE) // если точка была нажата самой первой то "0."
 			{
 				SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)"0.");
-				operation_input = TRUE; break;//
+				operation_input = TRUE; 
+				break; //завершить, ждать следующее нажатие кнопки
 			}
 			if (sz_display[strlen(sz_display) - 1] == '+'
 				|| sz_display[strlen(sz_display) - 1] == '-'
 				|| sz_display[strlen(sz_display) - 1] == '*'
-				|| sz_display[strlen(sz_display) - 1] == '/') //предыдущий знак
+				|| sz_display[strlen(sz_display) - 1] == '/') // если предыдущий знак действия, значит началось новое число и "." пребразуется в "0." и дописывается в выражение 
 			{
 				strcat(sz_display, "0.");
 				SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
 				operation_input = TRUE; break;//
 			}
 
+			//пповерка последнего числа на "."
 			const int SIZE = 256;
 			char buffer[SIZE]{};
 
@@ -316,56 +313,57 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			const char delimiters[] = "*/-+";
 			for (char* pch = strtok(buffer, delimiters); pch; pch = strtok(NULL, delimiters))
 				//Функция strtok() разделяет строку на токены:
-				sprintf_s(number_temp, pch);
+				sprintf_s(number_temp, pch);//сохраняем последний токен, последнее чило
 
-			if (strchr(number_temp, '.')) break;// ==NULL
-			if (sz_display[strlen(sz_display) - 1] == '.'
-				|| sz_display[strlen(sz_display) - 1] == '+'
-				|| sz_display[strlen(sz_display) - 1] == '-'
-				|| sz_display[strlen(sz_display) - 1] == '*'
-				|| sz_display[strlen(sz_display) - 1] == '/') sz_display[strlen(sz_display) - 1] = 0;
-			strcat(sz_display, ".");
-			SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
+			if (strchr(number_temp, '.')) break;// если в последнем числе есть точка, то игнорируем нажатие
+			strcat(sz_display, ".");//если добрались сюда, добавляем точку
+			SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);//выводим выражение
 		}
-		if (LOWORD(wParam) == IDC_BUTTON_BSP)
+		if (LOWORD(wParam) == IDC_BUTTON_BSP) //убирает последний символ
 		{
-			if (operation_input == FALSE)
+			if (operation_input == FALSE)//если это первое действие для нового выражения, то выводит "0"
 			{
 				SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)"0");
-				operation_input = TRUE; break;//
+				operation_input = TRUE; 
+				break;//
 			}
 			SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)sz_display);//считываем в буфер 
 
-			if (strlen(sz_display) == 1)sz_display[0] = '0';// ==NULL  break
-
-			else sz_display[strlen(sz_display) - 1] = 0;
+			if (strlen(sz_display) == 1)sz_display[0] = '0'; // длина строки до удаления была 1 символ, то результатом назначаем '0'
+			else sz_display[strlen(sz_display) - 1] = 0;// иначе зануляем последний символ
 			SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
 		}
-		if (LOWORD(wParam) == IDC_BUTTON_CLEAR)
+		if (LOWORD(wParam) == IDC_BUTTON_CLEAR)// сброс выражения
 		{
-			//if (operation_input == FALSE)
-			{
-				//SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)"0");
-				operation_input = TRUE;
-			}
-			//sz_display[0] = '0';// 			
-			//SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
+			operation_input = TRUE;
 			SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)"0");
 		}
-
+        
+		//знаки действий
 		if (LOWORD(wParam) == IDC_BUTTON_PLUS || LOWORD(wParam) == IDC_BUTTON_MINUS || LOWORD(wParam) == IDC_BUTTON_ASTER || LOWORD(wParam) == IDC_BUTTON_SLASH)
-		{
-			if (operation_input == FALSE)
+		{						
+			if (operation_input == FALSE)//если это первое действие для нового выражения, то обнуляем строку выражения
 			{
-				SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)"0");
 				operation_input = TRUE;
-				if (LOWORD(wParam) != IDC_BUTTON_MINUS)
+				
+				//если это минус, то выражение начнется с минуса, иначе игнорирум действие, но обнуляем выражение
+				if (LOWORD(wParam) == IDC_BUTTON_MINUS)
+					SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)"-");
+				else SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)"0");
 					break;//
 			}
+			SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)sz_display);//считываем в буфер 
+			// если на табло первый знак '-' или '+' единственный, то его можно поменять на '-' или '+' , 
+			// '*' или '/' игнорируем 			 
+			if ((sz_display[0] == '-' || sz_display[0] == '+') && sz_display[1] == 0) 
+			{				
+				SendMessage(hEditDisplayMemory, WM_SETTEXT, 0, (LPARAM)"test");
+				if (LOWORD(wParam) == IDC_BUTTON_MINUS) SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)"-");
+				else if (LOWORD(wParam) == IDC_BUTTON_PLUS) SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)"+");
+				break;
+			};
 
-
-
-			const int SIZE = 256;  //предыдущий .0 убрать
+			const int SIZE = 256;  //предыдущий .000 убрать до значимой цифры
 			char sz_display[SIZE]{};
 			char temp_sz_display[SIZE]{};
 
@@ -376,9 +374,8 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			for (char* pch = strtok(temp_sz_display, delimiters); pch; pch = strtok(NULL, delimiters))
 				//Функция strtok() разделяет строку на токены: на числа
 				sprintf_s(number_temp, pch);
-			//SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)number_temp);
-
-			if (strchr(number_temp, '.'))//number_temp
+			
+			if (strchr(number_temp, '.'))// если в последнем числе есть дробная часть, последние 00 убрать до значимой цифры
 			{
 				while (true)
 				{
@@ -387,96 +384,42 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 						number_temp[strlen(number_temp) - 1] = 0;
 						sz_display[strlen(sz_display) - 1] = 0;
 					}
-					else
-						break;
+					else break;
 				}
-
-				/*char number_temp_decimal[SIZE]{};
-				const char delimiters_decimal[] = ".";
-				for (char* pch = strtok(number_temp, delimiters_decimal); pch; pch = strtok(NULL, delimiters))
-					sprintf_s(number_temp_decimal, pch);*/
-
-					//if (atoi(number_temp_decimal) == 0)
-					//{
-					//	SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)sz_display);
-					//	//for (int i = 0; i < sizeof(sz_display)/sizeof(char); i++)
-					//	while (true)
-					//	{
-					//		if (strlen(sz_display) == 1) { sz_display[0] = '0'; break; }// ==NULL  
-
-					//		else if (sz_display[strlen(sz_display) - 1] = '.'||(sz_display[strlen(sz_display) - 1] >= 49&& sz_display[strlen(sz_display) - 1] <=57))
-					//		{
-					//			sz_display[strlen(sz_display) - 1] = 0; break;
-					//		}
-					//		else sz_display[strlen(sz_display) - 1] = 0;
-					//		//SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
-					//	}
-
-					//};
-
-			}
+}
+			//если последний знак действие, то его можно поменять на другой, затереть и написать занова
 			if (sz_display[strlen(sz_display) - 1] == '.' ||
 				sz_display[strlen(sz_display) - 1] == '+' ||
 				sz_display[strlen(sz_display) - 1] == '-' ||
 				sz_display[strlen(sz_display) - 1] == '*' ||
 				sz_display[strlen(sz_display) - 1] == '/') sz_display[strlen(sz_display) - 1] = 0;
 
-			//SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
-
-
-			//if (strlen(sz_display) == 1)sz_display[0] = '0';// ==NULL  break
-
-
 
 			if (LOWORD(wParam) == IDC_BUTTON_PLUS)
 			{
-				//SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)sz_display);
 				strcat(sz_display, "+");
-				//SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
-
 			}
 
 			if (LOWORD(wParam) == IDC_BUTTON_MINUS)
 			{
-				//SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)sz_display);
-
-				if (sz_display[0] == '0' && sz_display[1] == 0)sz_display[0] = '-';//strlen(sz_display) == 2
-
+				if (sz_display[0] == '0' && sz_display[1] == 0)sz_display[0] = '-';
 				else strcat(sz_display, "-");
-				//SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
 			}
 
 			if (LOWORD(wParam) == IDC_BUTTON_ASTER)
 			{
-				//SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)sz_display);
-				//if (sz_display[strlen(sz_display) - 1] == '.'
-				//	|| sz_display[strlen(sz_display) - 1] == '+'
-				//	|| sz_display[strlen(sz_display) - 1] == '-'
-				//	|| sz_display[strlen(sz_display) - 1] == '*'
-				//	|| sz_display[strlen(sz_display) - 1] == '/') sz_display[strlen(sz_display) - 1] = 0;
 				strcat(sz_display, "*");
-				//SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
 			}
 
 			if (LOWORD(wParam) == IDC_BUTTON_SLASH)
 			{
-				//SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)sz_display);
-				//if (sz_display[strlen(sz_display) - 1] == '.'
-				//	|| sz_display[strlen(sz_display) - 1] == '+'
-				//	|| sz_display[strlen(sz_display) - 1] == '-'
-				//	|| sz_display[strlen(sz_display) - 1] == '*'
-				//	|| sz_display[strlen(sz_display) - 1] == '/') sz_display[strlen(sz_display) - 1] = 0;
-				strcat(sz_display, "/");
-				//SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
+				strcat(sz_display, "/");				
 			}
-
-
 			SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
-
 		}
 
-
-		if (LOWORD(wParam) == IDC_BUTTON_EQUAL)
+		// вычисления //равно
+		if (LOWORD(wParam) == IDC_BUTTON_EQUAL) 
 		{
 			//SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
 			//if (operation_input)b = strtod(sz_display, NULL);
@@ -497,95 +440,61 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			char buffer[SIZE]{};
 
 			SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)buffer);
-			//HWND hEditDisplayMemory = GetDlgItem(hwnd, IDC_EDIT_DISPLAY_MEMORY);
-			SendMessage(hEditDisplayMemory, WM_SETTEXT, 0, (LPARAM)buffer);
-			if (buffer[0] == '-')
+			SendMessage(hEditDisplayMemory, WM_SETTEXT, 0, (LPARAM)buffer);//переносим выражение в строку памяти
+
+			if (buffer[0] == '-') // если выражение начинается с минуса, добавляем в начало "0"
 			{
 				char buffer_temp[SIZE] = "0";
 				strcat(buffer_temp, buffer); //конкатенация
 				strcpy(buffer, buffer_temp); // копирование
 			}
-			float number[10];
-			int n = 0;
+			float number[10];//массив на 10 чисел
+			int n = 0;//счетчик чисел
 			const char delimiters[] = "*/-+";
 			for (char* pch = strtok(buffer, delimiters); pch; pch = strtok(NULL, delimiters))
 				//Функция strtok() разделяет строку на токены:
 				number[n++] = atof(pch);
 			//pch - Pointer to Character (Указатель на символ)
-
-			/*for (int i = 0; i < n; i++)
-			{
-				char temp_sz_display[SIZE]{};
-
-				sprintf_s(temp_sz_display, "%g",  number[i]);
-				strcat(sz_display, temp_sz_display);
-				SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
-			}*/
-
+						
 			SendMessage(hEditDisplay, WM_GETTEXT, SIZE, (LPARAM)buffer);
-			//SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)buffer);
-			char znak[10];
-			int n1 = 0;
-			const char delimiters1[] = "0123456789.";
-			//for (char* pch = strtok(buffer, delimiters1); pch; pch = strtok(NULL, delimiters))
-
+		
+			char znak[10]; //массив на 10 действий
+			int n1 = 0;//счетчик действий
+			
 			char temp_znak_sz_display[SIZE]{};
 			char temp_znak_display[SIZE]{};
-			for (int i = 0; i < SIZE; i++)//sizeof(buffer)/ sizeof(char)
-			{
-				if (buffer[i] == '*' || buffer[i] == '/' || buffer[i] == '-' || buffer[i] == '+')// 
-				{
+			for (int i = 0; buffer[i]!=0; i++)//проверяем выражение, выбираем знаки действий			
+				if (buffer[i] == '*' || buffer[i] == '/' || buffer[i] == '-' || buffer[i] == '+')
 					znak[n1++] = buffer[i];
-					sprintf_s(temp_znak_sz_display, "%c", buffer[i]);
-					strcat(temp_znak_display, temp_znak_sz_display);
-				}
-			}
-			//SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)temp_znak_display);
-
-
-
-			for (int i = 0; i < n1; i++)
+			
+			for (int i = 0; i < n1; i++)// проверяем действия выполняем умножение и деление
+				// 1+2*3-4/4 преобразуется
+				// 1+0+6-0-1
+				// сложение и вычитание пропускаем, результат умножения и деления записываем во второе число текущей операции в первое записываем ноль, значок умножения или деления меняем на предыдущий в выражении плюс или минус
 				switch (znak[i])
 				{
-				case '*': {
+				case '*':
+				{
 					number[i + 1] = number[i] * (number[i + 1]);
 					number[i] = 0;
 					if (i == 0) znak[i] = '+';
 					else znak[i] = znak[i - 1];
 				}
-						break;
+				break;
 
-				case '/': {
+				case '/':
+				{
 					number[i + 1] = number[i] / (number[i + 1]);
 					number[i] = 0;
 					if (i == 0) znak[i] = '+';
 					else znak[i] = znak[i - 1];
 				}
-						break;
+				break;
 				}
 
-			/*for (int i = 0; i < n1; i++)
-			{
-				char temp_sz_display[SIZE]{};
-
-				sprintf_s(temp_sz_display, "%c", znak[i]);
-				strcat(sz_display, temp_sz_display);
-				SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
-			}*/
-
-			/*for (int i = 0; i < n; i++)
-			{
-				char temp_sz_display[SIZE]{};
-
-				sprintf_s(temp_sz_display, "%g", number[i]);
-				strcat(sz_display, temp_sz_display);
-				SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)sz_display);
-			}*/
-
-
-			float result = number[0];
+			float result = number[0];// 
 			CHAR message[SIZE]{};
-			for (int i = 0; i < n1; i++)
+			for (int i = 0; i < n1; i++)// вторым этапом сложение и деление
 				switch (znak[i])
 				{
 				case '+': result += number[i + 1]; break;
@@ -594,8 +503,8 @@ BOOL CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 			sprintf_s(message, "%g", result);
 
-			SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)message);
-			operation_input = FALSE;
+			SendMessage(hEditDisplay, WM_SETTEXT, 0, (LPARAM)message); //ура
+			operation_input = FALSE;// выражение  больше не обратываем, дальше будет новое
 		}
 	}
 	break;
