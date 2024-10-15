@@ -3,6 +3,7 @@
 // Used by Resource.rc
 
 #define IDC_EDIT_DISPLAY 900
+#define IDC_EDIT_DISPLAY_MEMORY 901
 
 #define IDC_BUTTON_0 1000
 #define IDC_BUTTON_1 1001
